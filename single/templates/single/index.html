@@ -1,0 +1,17 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <title>{% block title %}{% endblock title %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href={% static "accounts/style.css" %} type="text/css">
+</head>
+  <body>
+    <div class="singleapp-changepassword">
+    <img src="{% static "accounts/logo.png" %}" alt="Logo" title="logo">
+    {% block content %}
+    <h1 style="text-align: center"> The Single App </h1>
+    {% endblock content %}
+   </div>
+  </body>
+</html>

@@ -1,0 +1,114 @@
+@font-face {
+    font-family: 'Comic Sans MS';
+    src: local('Comic Sans MS'),
+       url('{% static 'ComicSansMS3.ttf' %} format("truetype")');
+}
+body
+{
+    padding: 0px;
+    margin: 0px;
+    background: #e8e8e8;
+    font-family: 'Comic Sans MS';
+
+}
+.singleapp-changepassword p
+{
+    font-size: 14px;
+    line-height: 24px;
+}
+.singleapp-changepassword
+{
+    padding: 30px;
+    margin: 3% auto 0px;
+    width: 400px;
+    display: table;
+    background: #fff;
+    box-shadow: 0px 0px 5px 0px #ccc;
+}
+.singleapp-changepassword img
+{
+    padding: 0px;
+    margin: 0px auto 20px;
+    width: 100px;
+    display: table;
+}
+.singleapp-changepassword h3
+{
+    padding: 0px 0px 15px;
+
+    margin: 0px;
+
+    font-size: 18px;
+
+    text-transform: uppercase;
+
+    letter-spacing: 1px;
+
+    color: #472e7c;
+
+    text-align: center;
+
+    font-weight: 300;
+}
+.singleapp-changepassword form
+{
+    padding: 0px;
+    margin: 0px;
+}
+.singleapp-changepassword form p
+{
+    padding: 0px;
+    margin: 0px;
+}
+.singleapp-changepassword form p label
+{
+    padding: 0px 0px 10px;
+    margin: 0px;
+    font-size: 14px;
+    display: table;
+    width: 100%;
+    letter-spacing: 1px;
+    color: #201f1f;
+}
+.singleapp-changepassword form input[type="password"]
+{
+    margin: 0px 0px;
+    font-size: 14px;
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+}
+.singleapp-changepassword ul
+{
+    padding:15px 0px 15px 0px;
+    margin: 0px;
+}
+.singleapp-changepassword ul li
+{
+    padding: 0px 0px 10px;
+    margin: 0px;
+    list-style: inside;
+    font-size: 13px;
+    line-height: 24px;
+    color:#464242;
+}
+.singleapp-changepassword form button
+{
+    padding: 10px;
+    margin: 20px 0px 0px 0px;
+    width: 100%;
+    background: #472e7c;
+    border: 1px solid #ccc;
+    color: #fff;
+    letter-spacing: 1px;
+    font-size: 14px;
+}
+
+@media only screen and (max-width: 600px) {
+.singleapp-changepassword
+{
+    width: 300px;
+    padding: 15px;
+    margin: 10% auto 0px;
+}
+}

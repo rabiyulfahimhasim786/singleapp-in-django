@@ -577,37 +577,43 @@ class ImageUpdateDeleteApiView(RetrieveUpdateDestroyAPIView):
     serializer_class = ImageSerializer
     permission_classes = [IsAuthenticated]
 
-
+#completed till 20/1/2023
+#user pass i favourite(user), you favourite (users friends)
 class FavouriteListCreateApiView(ListCreateAPIView):
     queryset = Favourite.objects.all()
     serializer_class = FavouriteSerializer
     permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
+        # complete db in mentioned model
         queryset = self.get_queryset()
         fav = request.query_params.get('q', None)
         count = request.query_params.get('count', None)
-
+       # user favourite list 
         if fav is not None and fav == 'ifav':
+            #ifav filtering in queryset based on requested user and other user
             queryset_i_fav = queryset.filter(
                 user=self.request.user).order_by('-id')
+            #queryset_i_fav count is 25 example 100/4 - we are sending 4 times  queryset_i_fav count (25)
             serializer = FavouriteSerializer(
                 data_slice(queryset_i_fav, count), many=True)
             return Response(serializer.data)
-
+        #other users favopurite list
         if fav is not None and fav == 'theyfav':
             queryset_they_fav = queryset.filter(
                 other=self.request.user).order_by('-id')
             serializer = FavouriteSerializer(
                 data_slice(queryset_they_fav, count), many=True)
             return Response(serializer.data)
-
+        #default case if it is exception to i fav and you fav
         serializer = FavouriteSerializer(queryset, many=True)
         return Response(serializer.data)
 
     def post(self, request, *args, **kwargs):
+        # data -  getting data from user
         user = request.data.get('user', None)
         other = request.data.get('other', None)
+        # header passing msg value
         msg = self.request.query_params.get('msg')
         u = User.objects.get(id=user)
         o = User.objects.get(id=other)
@@ -664,9 +670,11 @@ class UserLikeListCreateApiView(ListCreateAPIView):
         msg = self.request.query_params.get('msg')
         u = User.objects.get(id=user)
         o = User.objects.get(id=other)
-
+       #user  cant like his own profile
         if self.request.user == o:
             return Response({"status": "own profile"})
+        # other user  likes  one user profile,  this api will send notifications message 
+        # (example - instagram like notifications)
         if msg is None:
             msg = " %s  Liked your Profile" % (u.profile.first_name)
         serializer = UserLikeSerializer(data=request.data)
@@ -684,7 +692,7 @@ class UserLikeUpdateDeleteApiView(RetrieveUpdateDestroyAPIView):
     serializer_class = UserLikeSerializer
     permission_classes = [IsAuthenticated]
 
-
+# one user views other user profile data
 class UserViewedListCreateApiView(ListCreateAPIView):
     queryset = UserViewed.objects.all()
     serializer_class = UserViewedSerializer
@@ -797,12 +805,13 @@ class CommentListCreateApiView(ListCreateAPIView):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
     permission_classes = [IsAuthenticated]
-
+    #decending order comments list
     def get_queryset(self):
         queryset = Comment.objects.all().order_by('-id')
         return queryset
 
     def post(self, request, *args, **kwargs):
+        # user requested data
         user = request.data.get('user', None)
         other = request.data.get('other', None)
         msg = self.request.query_params.get('msg')
@@ -882,7 +891,7 @@ class FlirtUpdateDeleteApiView(RetrieveUpdateDestroyAPIView):
     serializer_class = FlirtSerializer
     permission_classes = [IsAuthenticated]
 
-
+#completed 20/1/23
 class MessageListCreateApiView(ListCreateAPIView):
     queryset = Message.objects.all()
     serializer_class = MessageSerializer
@@ -891,9 +900,12 @@ class MessageListCreateApiView(ListCreateAPIView):
     def get_msg_between_user_and_other(self, queryset, user, other):
         user_qs = queryset.filter(user=user, other=other)
         other_qs = queryset.filter(user=other, other=user)
+        # union used for merging two records
         data = user_qs.union(other_qs).order_by('-id')
         return data
-
+    # collecting two user friend request and checking first record in ascending order, 
+    # that particular request will be accepted by user else false
+    # first record will convert list(array) to invidual data set
     def check_is_friend_or_not(self, queryset, user, other):
         user_qs = queryset.filter(user=user, other=other)
         other_qs = queryset.filter(user=other, other=user)
@@ -947,9 +959,10 @@ class MessageListCreateApiView(ListCreateAPIView):
             # Who are they sent message to me
             queryset_user = queryset.filter(
                 other=self.request.user).order_by('-id')
+            # own profile record will be removed (exclude)
             queryset_o = queryset_user.exclude(
                 user=self.request.user).order_by('-id')
-
+            # unread message count
             for q in queryset_o:
                 if q.user.id not in unique:
                     unique.append(q.user.id)
@@ -1044,6 +1057,7 @@ class FriendListCreateApiView(ListCreateAPIView):
         accepted = self.request.query_params.get('accepted')
         count = self.request.query_params.get('count', None)
         queryset = Friend.objects.all()
+        # other user requested friend list 
         if user=='theyreq':
             queryset = queryset.filter(other=self.request.user)
             # queryset=queryset.filter(accepted=False)
@@ -1051,6 +1065,7 @@ class FriendListCreateApiView(ListCreateAPIView):
                     if q.accepted is False:
                         temp.append(q)
             return data_slice(temp, count)
+        # user accepted friend list 
         if user is not None:
             queryset = queryset.filter(user=user).union(
                 queryset.filter(other=user))
@@ -1108,7 +1123,7 @@ class FriendUpdateDeleteApiView(RetrieveUpdateDestroyAPIView):
         obj = get_object_or_404(self.get_queryset(), pk=self.kwargs["pk"])
         self.check_object_permissions(self.request, obj)
         return obj
-
+#completed 21/1/23
 
 class UserBlockedListCreateApiView(ListCreateAPIView):
     queryset = Blocked.objects.all()

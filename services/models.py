@@ -57,7 +57,7 @@ class Transaction(models.Model):
     ]
     transaction_id = models.CharField(max_length=70)
     status = models.CharField(max_length=20)
-    amount = amount = models.DecimalField(max_digits=8, decimal_places=2)
+    amount = models.DecimalField(max_digits=8, decimal_places=2)
     mode_of_payment = models.CharField(max_length=6, choices=PAYMENT_CHOICES)
     date = models.DateTimeField(default=timezone.now)
     premium_id = models.ForeignKey(
@@ -75,7 +75,9 @@ class Payment(models.Model):
         Transaction, related_name='payment_transaction', on_delete=models.CASCADE)
     date_of_payment = models.DateTimeField(default=timezone.now)
     valid_upto = models.DateTimeField()
-
+    # read only field - property
+    # is valid field is based on valid upto field in model,
+    # checking current plan is active or not based on boolean field true or false
     @property
     def is_valid(self):
         now = timezone.now()
@@ -90,7 +92,7 @@ class Payment(models.Model):
     def __str__(self):
         return "%s payment" % str(self.user_id.profile.first_name)
 
-
+# completed 24/1/23
 class AddCustomer(models.Model):
     '''Customer detail of advertisement company'''
     name_of_customer = models.CharField(max_length=100)
